@@ -1,3 +1,11 @@
+const express = require("express");
+const jwt = require("jsonwebtoken");
+const User = require("../models/user");
+const { SECRET_KEY } = require("../config");
+const ExpressError = require("../expressError");
+
+const router = new express.Router();
+
 /** GET / - get list of users.
  *
  * => {users: [{username, first_name, last_name, phone}, ...]}
@@ -32,3 +40,5 @@
  *                 to_user: {username, first_name, last_name, phone}}, ...]}
  *
  **/
+
+ module.exports = router;

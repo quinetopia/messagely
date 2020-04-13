@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest -i"
+    "test": "jest -i",
+    "start": "node server.js"
   },
   "author": "",
   "license": "ISC",
@@ -18,5 +19,15 @@
     "jsonwebtoken": "^8.3.0",
     "pg": "^7.5.0",
     "supertest": "^4.0.2"
-  }
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/quinetopia/messagely.git"
+  },
+  "keywords": [],
+  "bugs": {
+    "url": "https://github.com/quinetopia/messagely/issues"
+  },
+  "homepage": "https://github.com/quinetopia/messagely#readme"
 }
