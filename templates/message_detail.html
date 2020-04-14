@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block title %} Message from {{message.from_username}} {% endblock %}
+
+{% block content %}
+
+<section class="message">
+    <h2 class="message-from">From: {{ message.from_user.username }}</h2>
+    <p>{{ message.body }}</p>
+</section>
+
+{% endblock %}
