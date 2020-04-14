@@ -22,6 +22,10 @@ class Message {
             VALUES ($1, $2, $3, current_timestamp)
             RETURNING id, from_username, to_username, body, sent_at`,
         [from_username, to_username, body]);
+        
+    if (!result.rows[0]) {
+      throw new ExpressError(`No such message: ${id}`, 404);
+    }
 
     return result.rows[0];
   }

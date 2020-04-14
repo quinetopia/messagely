@@ -79,7 +79,6 @@ class User {
       `SELECT username, first_name, last_name, phone
       FROM users`
     );
-  
     return allUsers.rows;
   }
 
@@ -93,19 +92,21 @@ class User {
    *          last_login_at } */
 
   static async get(username) { 
-    const result = await db.query(
-      `SELECT username, first_name, last_name,
-        phone, join_at, last_login_at
-      FROM users
-      WHERE username = $1`, 
-      [username]);
-    
-    if (result.rows.length === 0) {
-      throw new expressError(`No such user: ${username}.`, 404); 
-    } else {
-      return result.rows[0];
-    }
-  }
+
+      console.log(`\n\n in User.get() \n\n`)
+      const results = await db.query(
+        `SELECT username, first_name, last_name,
+          phone, join_at, last_login_at
+        FROM users
+        WHERE username = $1`, 
+        [username]);
+
+      if (results.rows.length === 0) {
+        throw new expressError(`No such user: ${username}.`, 404); 
+      } else {
+        return results.rows[0];
+      }
+};
 
   /** Return messages from this user.
    *
