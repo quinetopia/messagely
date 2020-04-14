@@ -24,7 +24,20 @@ const router = new express.Router();
  * Make sure that the currently-logged-in users is either the to or from user.
  *
  **/
-
+router.get("/:id", ensureLoggedIn, async function(req, res, next){
+  try {
+    let currentUser = req.user.username;
+    let msgId = req.params.id;
+    let msg = await Message.get(msgId);
+    if (currentUser != msg.from_user.username && 
+        currentUser != msg.to_user.username){
+          throw new ExpressError("Not authorized", 401)
+        }
+    return res.json(msg);
+    }catch(err){
+      return next(err);
+    }
+});
 
 /** POST / - post message.
  *
@@ -32,21 +45,17 @@ const router = new express.Router();
  *   {message: {id, from_username, to_username, body, sent_at}}
  *
  **/
-router.post('/', async function(req, res, next){
+router.post('/', ensureLoggedIn, async function(req, res, next){
   let sentMsg;
   try{
-    ensureLoggedIn(req, res, next)
     let from_username = req.user.username;
     let { to_username, body } = req.body;
     sentMsg = await Message.create({from_username, to_username, body});
-    console.log(`\n\n\n\n I got out of Message.create(). ${sentMsg.id}, ${sentMsg.from_username}, ${sentMsg.to_username}, ${sentMsg.body}, ${sentMsg.sent_at}\n\n\n\n`)
   }catch(err){  
-    console.log(`\n\n In 1st Error catch. ${err}`)
     return next(err)}
   try {
     return res.json(sentMsg);
   }catch (err){
-    console.log(`\n\n In 2nd Error catch. ${err}`)
   return next(err)
 }
 });
@@ -58,5 +67,22 @@ router.post('/', async function(req, res, next){
  * Make sure that the only the intended recipient can mark as read.
  *
  **/
+
+router.post("/:id/read", ensureLoggedIn, async function(req, res, next){
+  try {
+    let currentUser = req.user.username;
+    let msgId = req.params.id;
+    let msg = await Message.get(msgId);
+    let msgRead;
+    if (currentUser != msg.to_user.username){
+          throw new ExpressError("Not authorized", 401)
+    }else{
+      msgRead = await Message.markRead(msgId);
+    }
+    return res.json(msgRead);
+    }catch(err){
+      return next(err);
+    }
+});
 
 module.exports = router;
